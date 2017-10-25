@@ -1,7 +1,7 @@
 #include<iostream>
 #include<climits>
 using namespace std;
- 
+
 void swap(int* x, int* y){
 	int temp = *x;
 	*x = *y;
@@ -14,7 +14,7 @@ class MinHeap{
 		int capacity;
 		int heap_size;
 	public:
-		MinHeap(int capacity);
+		MinHeap(int tam);
 		void Heapify(int i);
 		int parent(int i);
 		int left(int i);
@@ -49,34 +49,56 @@ int MinHeap::right(int i){
 }
 
 //template <class T>
+void MinHeap::insertKey(int k){
+	if (heap_size == capacity){
+		cout<<"no se puede insertar key"<<endl;
+		return;
+	}
+
+	heap_size++;
+	int i = heap_size -1;
+	pArray[i] = k;
+
+	while (i != 0 && pArray[parent(i)] > pArray[i]){
+		swap(&pArray[i], &pArray[parent(i)]);
+		i = parent(i);
+	}
+}
+
+//template <class T>
 void MinHeap::Heapify(int i){
 	int l = left(i);
 	int r = right(i);
-	int smallest = i; 
+	int smallest = i;
 	if (l < heap_size && pArray[l] < pArray[i])
 		smallest =l;
 	if (r < heap_size && pArray[r] < pArray[smallest])
 		smallest = r;
-	if (smallest != i){
-		swap(&pArray[i], &pArray[smallest]);
-		Heapify(smallest);
-	}
+	// if (smallest != i){
+	// 	swap(&pArray[i], &pArray[smallest]);
+	// 	Heapify(smallest);
+	// }
+	if (smallest == i)
+		return;
+	swap(&pArray[i], &pArray[smallest]);
+	Heapify(smallest);
 
-	/*int H = i;
-	if (pArray[i] < pArray[left(pArray[i])])
-		H = pArray[left(pArray[i])];
-	if (H < pArray[right(pArray[i])])
-		H = pArray[right(pArray[i])];
-	if (H == i) return;
-	swap(pArray[i], pArray[H]);
-	Heapify(H);*/
-	
+
+	// int Minimo = i;
+	// if (pArray[i] < pArray[left(pArray[i])])
+	// 	Minimo = pArray[left(pArray[i])];
+	// if (Minimo < pArray[right(pArray[i])])
+	// 	Minimo = pArray[right(pArray[i])];
+	// if (Minimo == i) return;
+	// swap(pArray[i], pArray[Minimo]);
+	// Heapify(Minimo);
+
 }
 
 //template <class T>
 int MinHeap::extractMin(){
 	if (heap_size <= 0)
-		return INT_MAX;
+		return 0;//INT_MAX;
 	if (heap_size == 1){
 		heap_size--;
 		return pArray[0];
@@ -110,22 +132,6 @@ void MinHeap::deleteKey(int i){
 	extractMin();
 }
 
-//template <class T>
-void MinHeap::insertKey(int k){
-	if (heap_size == capacity){
-		cout<<"no se puede insertar key"<<endl;
-		return;
-	}
-	
-	heap_size++;
-	int i = heap_size -1;
-	pArray[i] = k;
-
-	while (i != 0 && pArray[parent(i)] > pArray[i]){
-		swap(&pArray[i], &pArray[parent(i)]);
-		i = parent(i);
-	}
-}
 
 int main(){
 	MinHeap minh1(11);
@@ -136,9 +142,9 @@ int main(){
 	minh1.insertKey(5);
 	minh1.insertKey(4);
 	minh1.insertKey(45);
-	cout<<minh1.extractMin()<< " ";
-	cout<<minh1.getMin()<< " ";
+	cout<<minh1.extractMin()<< " - ";
+	cout<<minh1.getMin()<< " - ";
 	minh1.decereaseKey(2,1);
-	cout<<minh1.getMin();
+	cout<<minh1.getMin()<<endl;
 	return 0;
 }
